@@ -3,6 +3,7 @@ from elasticsearch import Elasticsearch
 from datetime import date
 import ast
 
+
 # --- Authentication Section ---
 es_host = "https://minutes-dbfc0f.es.us-east-1.aws.elastic.cloud:443"
 es_api_key = "ZGhmWDZKY0JvVnJ5ejlfWkNDSXI6aFJ1Ym9seGYyOUFyR1p5aXNpQVNRQQ=="
@@ -143,10 +144,14 @@ def es_completion(prompt, inference_id):
     return response['completion'][0]['result']
 
 # --- UI Elements ---
+
 st.set_page_config(page_title="The Friendly Bookstore Chatbot", layout="centered")
 st.title("Welcome at The Friendly Bookstore")
 
+
+
 with st.form("chat_form"):
+    
     col1, col2 = st.columns(2)
     with col1:
         chat_date = st.date_input("Date of chat", value=date.today())
@@ -156,6 +161,8 @@ with st.form("chat_form"):
         city = st.text_input("City", value="Amsterdam")
     user_message = st.text_area("Your Question/Chat", value="Can you recommend some recent books?")
     submitted = st.form_submit_button("How can I help you?")
+       
+    
 
 if submitted:
     
@@ -231,5 +238,6 @@ Instructions:
 - Always respond in English (UK)
 """
         llm_final_content = es_completion(prompt_chat, es_iid)
+       
         st.subheader("Chat Response")
         st.markdown(llm_final_content)

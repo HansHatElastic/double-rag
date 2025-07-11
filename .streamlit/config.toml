@@ -1,0 +1,8 @@
+[theme]
+base="light"
+primaryColor="#4a4d55"                # Vibrant blue for highlights
+backgroundColor="#f8f9fa"             # Deep dark background
+secondaryBackgroundColor="#d4dae5"    # Slightly lighter for cards/sections
+textColor="#4a4d55"                   # Light text for readability
+font="sans serif"                     # Modern, clean font
+
