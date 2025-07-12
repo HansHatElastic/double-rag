@@ -174,10 +174,13 @@ if submitted:
         st.error("Please enter a message.")
     else:
         # --- Call Services ---
-        config_message = (
-            "Find: What books categories are interesting by age, "
-            "what books categories are bought in seasons and for holidays, "
-            "and contact information for our store"
+        config_message = (f"""
+            Find: What books categories are interesting by age, 
+            what books categories are bought in seasons and for holidays,
+            our customer profile,
+            our business objectives,                             
+            and contact information for our store"
+            """              
         )
         es_results = search_elasticsearch(1, config_message)
         es_info = ""
@@ -197,7 +200,9 @@ Instructions:
 4. Distance to the store: Calculate the he travel distance from {city} to Amsterdam in kilometers, and put only the numerical result here in 
 5. Season and or holidays: List here,separated by comma's, given the date {chat_date}, what season we are in, and what Dutch holidays and events are in the near future
 6. Categories: a comma separated list of book categories. These categories should be derived from the context below based on age, and the time of the year given by the date {chat_date}  
-7. Contact information : Name of the store Address of the book store in Amsterdam, and the web site
+7. Customer profile: a summary of maximum 100 words of our customer profile
+8. Business objectives : a summary of maximum 100 words of our business objectives
+9. Contact information : Name of the store Address of the book store in Amsterdam, and the web site
 
 Always follow this exact structure when responding, a well-formed Python dictionary containing the values as described above, containing the following entries:
 -"name": <the value of name as described above, enclosed in double quotes>,
@@ -206,7 +211,9 @@ Always follow this exact structure when responding, a well-formed Python diction
 -"distance": <the value of distance as described above, no quotes, numerical value>,
 -"season_holidays": <the value of season or holidays as described above, enclosed in double quotes>,    
 -"categories": <the value of categories as described above, enclosed in double quotes>, 
--"contact_information": <the value of contact_information as described above, enclosed in double quotes>,
+-"contact_information": <the value of contact information as described above, enclosed in double quotes>,
+-"customer_profile": <the value of the customer profile as described above, enclosed in double quotes>,
+-"business_objectives": <the value of the business objectives as described above, enclosed in double quotes>
 
 Context:
 {es_info}
@@ -233,6 +240,8 @@ Instructions:
 - The distance to the store is {llm_query_content["distance"]} kilometers. If this distance is less than 10 kilometers recommend visiting the store in Amsterdam, else refer to the web site. Do not mention actual distance in the response, but use terms as 'close' , or 'far'
 - The user is mainly interested in books in the categories : {llm_query_content["categories"]}
 - Books that are interesting for the user are described in this API response: {es_results}, use only books from this API response
+- Take into account our customer profile as described here : {llm_query_content["customer_profile"]}
+- Align your response with our business objectives : {llm_query_content["business_objectives"]}
 - Do not list all categories of interest in the response
 - Your response should be at the most 250 words
 - Always respond in English (UK)
