@@ -148,22 +148,18 @@ def es_completion(prompt, inference_id):
 st.set_page_config(page_title="The Friendly Bookstore Chatbot", layout="centered")
 st.title("Welcome at The Friendly Bookstore")
 
-
-
 with st.form("chat_form"):
     
     col1, col2 = st.columns(2)
     with col1:
         chat_date = st.date_input("Date of chat", value=date.today())
-        birth_date = st.date_input("Birth Date", value=date(1999, 10, 11),min_value="1900-01-01")
+        birth_date = st.date_input("Your Birthdate", value=date(1999, 10, 11),min_value="1900-01-01")
     with col2:
-        name = st.text_input("User Name", max_chars=50, value="Mary Jones")
-        city = st.text_input("City", value="Amsterdam")
-    user_message = st.text_area("Your Question/Chat", value="Can you recommend some recent books?")
-    submitted = st.form_submit_button("How can I help you?")
-       
-    
-
+        name = st.text_input("Your Name", max_chars=50, value="Mary Jones")
+        city = st.text_input("Where do you live", value="Amsterdam")
+    user_message = st.text_area("How can we help you", value="Can you recommend some recent books?")
+    submitted = st.form_submit_button(label="Just Ask !!",icon=":material/chat_paste_go:")
+ 
 if submitted:
     
     # --- Input Validation ---
