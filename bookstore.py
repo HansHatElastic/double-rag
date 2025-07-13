@@ -199,12 +199,13 @@ Instructions:
 3. Age: Calculate the age of the user on {chat_date}, given the birth date {birth_date}. Age should be just a numeric value
 4. Distance to the store: Calculate the he travel distance from {city} to Amsterdam in kilometers, and put only the numerical result here in 
 5. Season and or holidays: List here,separated by comma's, given the date {chat_date}, what season we are in, and what Dutch holidays and events are in the near future
-6. Categories: a comma separated list of book categories. These categories should be derived from the context below based on age, and the time of the year given by the date {chat_date}  
-7. Customer profile: a summary of maximum 100 words of our customer profile
-8. Business objectives : a summary of maximum 100 words of our business objectives
-9. Contact information : Name of the store Address of the book store in Amsterdam, and the web site
+6. Categories: a comma separated list of book categories. These categories should be derived from the context below based on age, and the time of the year given by the date {chat_date}.
+    Only list the top 3 most relevant categories  
+7. Customer profile: a summary of maximum 200 words of our customer profile
+8. Business objectives : a summary of maximum 200 words of our business objectives
+9. Contact information : Name of the store address of the book store in Amsterdam, and the web site
 
-Always follow this exact structure when responding, a well-formed Python dictionary containing the values as described above, containing the following entries:
+Always follow this exact structure when responding, a well-formed Python dictionary containing the values as described above, containing only the following entries:
 -"name": <the value of name as described above, enclosed in double quotes>,
 -"date": <the value of date as described above, enclosed in double quotes>,
 -"age" : <the value of age as described above, no quotes, numerical value>,
