@@ -145,8 +145,8 @@ def es_completion(prompt, inference_id):
 
 # --- UI Elements ---
 
-st.set_page_config(page_title="The Friendly Bookstore Chatbot", layout="centered")
-st.title("Welcome at The Friendly Bookstore")
+st.set_page_config(page_title="The Friendly Bookstore", layout="centered")
+st.title(":books: The Friendly Bookstore",width="stretch")
 
 with st.form("chat_form"):
     
@@ -217,7 +217,7 @@ Context:
 """
         llm_query_content = es_completion(prompt_query, es_iid)
         llm_query_content = ast.literal_eval(llm_query_content)
-        st.subheader("Building block for the books query")
+        st.subheader(":card_index: *Building block for the books query*",divider="grey",)
         st.json(llm_query_content)
 
         # Query the right books
@@ -247,5 +247,8 @@ Instructions:
 """
         llm_final_content = es_completion(prompt_chat, es_iid)
        
-        st.subheader("Chat Response")
+        st.subheader(":sparkles: *Search AI Response*",divider="grey")
         st.markdown(llm_final_content)
+        st.image("elastic-logo.svg",width=200)
+
+        
