@@ -1,19 +1,19 @@
 import streamlit as st
+# --- Only importing the Elastsearch library is needed: handles also the access to the LLM ---
 from elasticsearch import Elasticsearch
 from datetime import date
 import ast
 
-
-# --- Authentication Section ---
+# --- Connection to the Elastic Serverless Cluster Section ---
 es_host = "https://minutes-dbfc0f.es.us-east-1.aws.elastic.cloud:443"
 es_api_key = "ZGhmWDZKY0JvVnJ5ejlfWkNDSXI6aFJ1Ym9seGYyOUFyR1p5aXNpQVNRQQ=="
 es_iid = "proxy_completion"
 
-# --- Service Clients ---
 es_client = Elasticsearch(hosts=[es_host], api_key=es_api_key)
 
-# --- Building Blocks for Service Calls ---
+# --- Building Blocks for Service Calls to Elastic (mainly for readability of the code) ---
 def search_elasticsearch(query_no, query):
+# --- Queries based on templates created with the Elastic's Playground  ---    
     if query_no == 1:
         es_query = {
             "retriever": {
@@ -136,6 +136,7 @@ def search_elasticsearch(query_no, query):
     return result
 
 def es_completion(prompt, inference_id):
+# --- LLM completion is handled via the Elastic Inference service ---
     response = es_client.inference.inference(
         inference_id=inference_id,
         task_type="completion",
@@ -143,7 +144,7 @@ def es_completion(prompt, inference_id):
     )
     return response['completion'][0]['result']
 
-# --- UI Elements ---
+# --- Creating the StreamLit UI Elements ---
 
 st.set_page_config(page_title="The Friendly Bookstore", layout="centered")
 st.title(":books: The Friendly Bookstore",width="stretch")
@@ -161,7 +162,7 @@ with st.form("chat_form"):
     submitted = st.form_submit_button(label="Just Ask !!",icon=":material/chat_paste_go:")
  
 if submitted:
-    
+# --- Executing the actual flow when clicking the button ---   
     # --- Input Validation ---
     if not name.strip() or not any(char.isalnum() for char in name):
         
@@ -169,7 +170,7 @@ if submitted:
     elif not user_message.strip():
         st.error("Please enter a message.")
     else:
-        # --- Call Services ---
+# --- Step 1: Querying the vector database for the relevant query configuration/parameter documents ---
         config_message = (f"""
             Find: What books categories are interesting by age, 
             what books categories are bought in seasons and for holidays,
@@ -183,7 +184,7 @@ if submitted:
         for i in range(len(es_results)):
             es_info += es_results[i]["highlight"]["semantic_text"][0]
 
-        # Ask LLM for creating the query configuration
+# --- Step 2: Prompting the LLM (via EIS) for a JSON file with the right parameters/config ---
         prompt_query = f"""
 Instructions:
 
@@ -220,14 +221,14 @@ Context:
         st.subheader(":card_index: *Building block for the books query*",divider="grey",)
         st.json(llm_query_content)
 
-        # Query the right books
+# --- Step 3: Querying the vector database for the relevant books chunks using the retrieved 'Categories' ---
         books_query = f"""
 {user_message},
 Categories: {llm_query_content["categories"]}
 """
         es_results = search_elasticsearch(2, books_query)
 
-        # Asking the LLM to make the final response
+# --- Step 4: Prompting the LLM (via EIS): bringing together books and configuration/parameters ---
         prompt_chat = f"""
 Instructions:
 - You are a friendly chatbot for the web shop of {llm_query_content["contact_information"]}. You only answers questions regarding the content described in this prompt. 
@@ -250,5 +251,3 @@ Instructions:
         st.subheader(":sparkles: *Search AI Response*",divider="grey")
         st.markdown(llm_final_content)
         st.image("elastic-logo.svg",width=200)
-
-        
