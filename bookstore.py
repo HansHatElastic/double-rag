@@ -235,7 +235,7 @@ Instructions:
 - The question of the user of the chatbot is : {user_message}
 - The person you are talking to is {llm_query_content["name"]}, aged {llm_query_content["age"]}
 - The information you deliver is related to date {llm_query_content["date"]}, and if applicable mention the seasons or holidays mentioned here : {llm_query_content["season_holidays"]}
-- The distance to the store is {llm_query_content["distance"]} kilometers. If this distance is less than 10 kilometers recommend visiting the store in Amsterdam, else refer to the web site. Do not mention actual distance in the response, but use terms as 'close' , or 'far'
+- The distance to the store is {llm_query_content["distance"]} kilometers. If this distance is less than 10 kilometers recommend visiting the store in Amsterdam, else refer to the web site (always mention the url if you refer to the web site). Do not mention actual distance in the response, but use terms as 'close' , or 'far'
 - The user is mainly interested in books in the categories : {llm_query_content["categories"]}
 - Books that are interesting for the user are described in this API response: {es_results}, use only books from this API response
 - The URL to the page of the book on the web site of our store has the following structure: https://www.the-friendly-bookstore.nl/<ISNBN> , where <ISBN> is the ISBN number of the book. 
