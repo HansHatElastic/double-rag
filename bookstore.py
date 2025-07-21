@@ -14,7 +14,7 @@ es_client = Elasticsearch(hosts=[es_host], api_key=es_api_key)
 # --- Building Blocks for Service Calls to Elastic (mainly for readability of the code) ---
 def search_elasticsearch(query_no, query):
 # --- Queries based on templates created with the Elastic's Playground  ---    
-    if query_no == 1:
+    if query_no == 'knowledge':
         es_query = {
             "retriever": {
                 "standard": {
@@ -41,7 +41,7 @@ def search_elasticsearch(query_no, query):
             body=es_query
         )
         result = full_result["hits"]["hits"]
-    elif query_no == 2:
+    elif query_no == 'books':
         es_query = {
             "retriever": {
                 "rrf": {
@@ -147,7 +147,7 @@ def es_completion(prompt, inference_id):
 # --- Creating the StreamLit UI Elements ---
 
 st.set_page_config(page_title="The Friendly Bookstore", layout="centered")
-st.title(":books: The Friendly Bookstore",width="stretch")
+st.title(":books: :rainbow[The Friendly Bookstore]",width="stretch")
 
 with st.form("chat_form"):
     
@@ -170,7 +170,7 @@ if submitted:
     elif not user_message.strip():
         st.error("Please enter a message.")
     else:
-# --- Step 1: Querying the vector database for the relevant query configuration/parameter documents ---
+# --- Step 1: Searching the knowledge base for the relevant books query configuration/parameter documents ---
         config_message = (f"""
             Find: What books categories are interesting by age, 
             what books categories are bought in seasons and for holidays,
@@ -179,7 +179,7 @@ if submitted:
             and contact information for our store"
             """              
         )
-        es_results = search_elasticsearch(1, config_message)
+        es_results = search_elasticsearch('knowledge', config_message)
         es_info = ""
         for i in range(len(es_results)):
             es_info += es_results[i]["highlight"]["semantic_text"][0]
@@ -221,12 +221,12 @@ Context:
         st.subheader(":card_index: *Building block for the books query*",divider="grey",)
         st.json(llm_query_content)
 
-# --- Step 3: Querying the vector database for the relevant books chunks using the retrieved 'Categories' ---
+# --- Step 3: Querying the books vector database for the relevant books chunks using the retrieved 'Categories' ---
         books_query = f"""
 {user_message},
 Categories: {llm_query_content["categories"]}
 """
-        es_results = search_elasticsearch(2, books_query)
+        es_results = search_elasticsearch('books', books_query)
 
 # --- Step 4: Prompting the LLM (via EIS): bringing together books and configuration/parameters ---
         prompt_chat = f"""
@@ -250,4 +250,8 @@ Instructions:
        
         st.subheader(":sparkles: *Search AI Response*",divider="grey")
         st.markdown(llm_final_content)
-        st.image("elastic-logo.svg",width=200)
+        col3, col4 = st.columns([0.17,0.83],gap="small",vertical_alignment="center")
+        with col3:
+          st.markdown(r"$\textsf{\large Powered by: }$",)
+        with col4:
+          st.image("elastic-logo.svg",width=200)
