@@ -6,7 +6,7 @@ import ast
 
 # --- Connection to the Elastic Serverless Cluster Section ---
 es_host = "https://minutes-dbfc0f.es.us-east-1.aws.elastic.cloud:443"
-es_api_key = "ZGhmWDZKY0JvVnJ5ejlfWkNDSXI6aFJ1Ym9seGYyOUFyR1p5aXNpQVNRQQ=="
+es_api_key = "T01tNFBKZ0I3VFZEZmFRa1JjQlA6NGxoVFZELTY3UUEtN0gtSHdIQ2k5UQ=="
 es_iid = "proxy_completion"
 
 es_client = Elasticsearch(hosts=[es_host], api_key=es_api_key)
@@ -158,7 +158,7 @@ with st.form("chat_form"):
     with col2:
         name = st.text_input(":blue-background[  Your Name  ]", max_chars=50, value="Mary Jones")
         city = st.text_input(":blue-background[  Where do you live  ]", value="Amsterdam")
-    user_message = st.text_area(r"$\textsf{\large How can we help you?}$", value="Can you recommend some recent books?")
+    user_message = st.text_area(r"$\textsf{\large How can we help you?}$", value="Can you recommend some books?")
     submitted = st.form_submit_button(label="Just Ask !!",icon=":material/chat_paste_go:")
  
 if submitted:
