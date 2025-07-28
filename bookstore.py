@@ -3,11 +3,14 @@ import streamlit as st
 from elasticsearch import Elasticsearch
 from datetime import date
 import ast
+import os
+from dotenv import load_dotenv
 
 # --- Connection to the Elastic Serverless Cluster Section ---
-es_host = "https://minutes-dbfc0f.es.us-east-1.aws.elastic.cloud:443"
-es_api_key = "T01tNFBKZ0I3VFZEZmFRa1JjQlA6NGxoVFZELTY3UUEtN0gtSHdIQ2k5UQ=="
-es_iid = "proxy_completion"
+load_dotenv()
+es_host =os.environ['ES_HOST']
+es_api_key = os.environ['API_KEY']
+es_iid = os.environ['ES_IID']
 
 es_client = Elasticsearch(hosts=[es_host], api_key=es_api_key)
 
