@@ -171,7 +171,7 @@ if submitted:
         
         st.error("Name must contain at least one alphanumeric character.")
     elif not user_message.strip():
-        st.error("Please enter a message.")
+        st.error("Please enter a question.")
     else:
 # --- Step 1: Searching the knowledge base for the relevant books query configuration/parameter documents ---
         config_message = (f"""
@@ -221,7 +221,7 @@ Context:
 """
         llm_query_content = es_completion(prompt_query, es_iid)
         llm_query_content = ast.literal_eval(llm_query_content)
-        st.subheader(":card_index: *Building block for the books query*",divider="grey",)
+        st.subheader(":building_construction: *Building block for the books query*",divider="grey",)
         st.json(llm_query_content)
 
 # --- Step 3: Querying the books vector database for the relevant books chunks using the retrieved 'Categories' ---
